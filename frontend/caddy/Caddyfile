@@ -1,0 +1,13 @@
+:80 {
+	handle /auth/* {
+		# rewrite * /auth{uri}
+		reverse_proxy http://auth:3000
+	}
+
+	handle {
+		root * /www
+		encode gzip
+		try_files {path} /index.html
+		file_server
+	}
+}
