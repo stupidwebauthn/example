@@ -7,8 +7,6 @@ RUN --mount=type=cache,target=/root/.yarn YARN_CACHE_FOLDER=/root/.yarn yarn ins
 COPY . .
 RUN --mount=type=cache,target=/root/.yarn YARN_CACHE_FOLDER=/root/.yarn yarn run build
 
-RUN yarn run build
-
 FROM caddy:alpine
 WORKDIR /www
 COPY ./caddy /caddy
