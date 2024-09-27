@@ -73,7 +73,7 @@ export default function Login() {
               />
 
               <Button type="submit" color="primary" fullWidth>
-                Register with your device
+                Login with your device
               </Button>
             </Form>
           ) : step === Step.list_credentials ? (
