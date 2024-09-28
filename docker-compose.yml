@@ -12,6 +12,7 @@ services:
     image: ghcr.io/stupidwebauthn/server:latest
     # ports:
     #   - 127.0.0.1:3000:3000
+    restart: unless-stopped
     environment:
       - SMTP_HOST=mail
       - SMTP_PORT=1025
