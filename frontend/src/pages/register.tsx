@@ -51,7 +51,7 @@ export default function Register() {
   function onSubmitStep1(e: any) {
     e.preventDefault();
     const email = e.target.email.value;
-    client.Register1EmailChallenge(email).then(() => setStep(2));
+    client.Register1EmailChallenge(email).then(() => setStep(Step.sent_email));
   }
 
   function onSubmitStep4() {
