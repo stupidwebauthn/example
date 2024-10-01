@@ -3,8 +3,8 @@ import Index from "./pages";
 import Register from "./pages/register";
 import Private from "./pages/private";
 import Login from "./pages/login";
-import { Avatar, Button, Link } from "@nextui-org/react";
-import { StarIcon } from "lucide-react";
+import { Button, Link } from "@nextui-org/react";
+import { BookOpenTextIcon, StarIcon } from "lucide-react";
 
 function App() {
   const router = createBrowserRouter([
@@ -42,13 +42,11 @@ function App() {
           as={Link}
           target="_blank"
           variant="flat"
-          href="https://github.com/lil5"
+          data-umami-event="Go to documentation site"
+          href="https://stupidwebauthn.site/"
         >
-          <Avatar
-            className="w-6 h-6"
-            src="https://avatars.githubusercontent.com/u/17646836?v=4"
-          ></Avatar>
-          Lucian Last
+          <BookOpenTextIcon className="me-1 text-default-600" />
+          Docs
         </Button>
       </div>
       <RouterProvider router={router} />

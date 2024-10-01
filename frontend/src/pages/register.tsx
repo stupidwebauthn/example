@@ -9,10 +9,12 @@ import {
   Input,
   Progress,
 } from "@nextui-org/react";
-import { Form, useLocation, useNavigate } from "react-router-dom";
+import { Form, Link, useLocation, useNavigate } from "react-router-dom";
 import StupidWebauthnClient from "stupidwebauthn-client";
 import { useEffect, useState } from "react";
 import queryString from "query-string";
+import useError from "../components/error.hook";
+import { ArrowLeftIcon } from "lucide-react";
 
 const client = new StupidWebauthnClient();
 
@@ -27,6 +29,7 @@ enum Step {
 
 export default function Register() {
   const [step, _setStep] = useState<Step>(Step.none);
+  const err = useError();
   const setStep = (s: Step) => {
     console.info("Step:", s);
     _setStep(s);
@@ -35,49 +38,63 @@ export default function Register() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const params = queryString.parse(location.search) as { c?: string };
-    // check if step 3
-    if (params.c) {
-      setStep(Step.validating_email);
-      client.Register2EmailValidate(params.c).then(() => {
+    err.asyncOrCatch(async () => {
+      const params = queryString.parse(location.search) as { c?: string };
+
+      // check if step 3
+      if (params.c) {
+        setStep(Step.validating_email);
+        await client.Register2EmailValidate(params.c);
         setStep(Step.click_passkey);
-      });
-    } else {
-      setStep(Step.input_email);
-    }
+      } else {
+        setStep(Step.input_email);
+      }
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function onSubmitStep1(e: any) {
     e.preventDefault();
     const email = e.target.email.value;
-    client.Register1EmailChallenge(email).then(() => setStep(Step.sent_email));
+
+    err.asyncOrCatch(async () => {
+      await client.Register1EmailChallenge(email);
+      setStep(Step.sent_email);
+    });
   }
 
   function onSubmitStep4() {
-    client.Register3PasskeyChallenge().then((res) =>
-      client.Register4AuthorizePasskey(res.challenge).then((res2) =>
-        client.Register5PasskeyValidate(res2).then(() => {
-          setStep(Step.authenticated);
-          setTimeout(() => {
-            navigate("/private");
-          }, 1300);
-        })
-      )
-    );
+    err.asyncOrCatch(async () => {
+      const res1 = await client.Register3PasskeyChallenge();
+      const res2 = await client.Register4AuthorizePasskey(res1.challenge);
+      await client.Register5PasskeyValidate(res2);
+      setStep(Step.authenticated);
+      setTimeout(() => {
+        navigate("/private");
+      }, 1300);
+    });
   }
 
   return (
     <div className="flex min-h-svh justify-center items-center">
       <Card>
+        <Button
+          as={Link}
+          to="/"
+          className="rounded-full w-8 h-8 min-w-min p-0 mt-2 mx-2"
+          variant="flat"
+        >
+          <ArrowLeftIcon size={16} />
+        </Button>
         <CardHeader>Register</CardHeader>
-        <CardBody>
+        <CardBody className="space-y-4">
           {step == Step.input_email || step == Step.sent_email ? (
             <Form onSubmit={onSubmitStep1} className="space-y-4">
               <Input
                 type="email"
                 name="email"
                 label="Email"
+                autoComplete="email"
                 isRequired
                 required
               />
@@ -99,6 +116,7 @@ export default function Register() {
               Add Passkey to your new account
             </Button>
           ) : null}
+          {err.render()}
         </CardBody>
 
         <CardFooter>
