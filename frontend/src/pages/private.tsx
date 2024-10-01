@@ -1,5 +1,5 @@
 import { Button, Card, CardBody, CardHeader } from "@nextui-org/react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import StupidWebauthnClient from "stupidwebauthn-client";
 import { useEffect } from "react";
 import { ArrowLeftIcon } from "lucide-react";
