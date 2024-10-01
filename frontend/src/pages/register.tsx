@@ -66,7 +66,7 @@ export default function Register() {
   function onSubmitStep4() {
     err.asyncOrCatch(async () => {
       const res1 = await client.Register3PasskeyChallenge();
-      const res2 = await client.Register4AuthorizePasskey(res1.challenge);
+      const res2 = await client.Register4AuthorizePasskey(res1);
       await client.Register5PasskeyValidate(res2);
       setStep(Step.authenticated);
       setTimeout(() => {
@@ -76,8 +76,8 @@ export default function Register() {
   }
 
   return (
-    <div className="flex min-h-svh justify-center items-center">
-      <Card>
+    <div className="flex min-h-svh justify-center items-start py-24">
+      <Card className="w-full max-w-96">
         <Button
           as={Link}
           to="/"
