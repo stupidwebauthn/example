@@ -29,6 +29,7 @@ enum Step {
 
 export default function Register() {
   const [step, _setStep] = useState<Step>(Step.none);
+  const [email, setEmail] = useState("");
   const err = useError();
   const setStep = (s: Step) => {
     console.info("Step:", s);
@@ -39,7 +40,10 @@ export default function Register() {
 
   useEffect(() => {
     err.asyncOrCatch(async () => {
-      const params = queryString.parse(location.search) as { c?: string };
+      const params = queryString.parse(location.search) as {
+        c?: string;
+        email?: string;
+      };
 
       // check if step 3
       if (params.c) {
@@ -48,6 +52,7 @@ export default function Register() {
         setStep(Step.click_passkey);
       } else {
         setStep(Step.input_email);
+        setEmail(params.email || "");
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -97,6 +102,8 @@ export default function Register() {
                 autoComplete="email"
                 isRequired
                 required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
 
               <Button type="submit" color="primary" fullWidth>

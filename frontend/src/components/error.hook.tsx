@@ -28,7 +28,13 @@ export default function useError() {
   const render = useCallback(() => {
     if (!message) return null;
     return (
-      <Snippet symbol="Err:" size="sm" variant="flat" color="danger">
+      <Snippet
+        symbol="Err:"
+        size="sm"
+        variant="flat"
+        color="danger"
+        classNames={{ pre: "whitespace-normal" }}
+      >
         {message}
       </Snippet>
     );

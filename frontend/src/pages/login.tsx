@@ -23,6 +23,7 @@ const client = new StupidWebauthnClient();
 
 export default function Login() {
   const [step, _setStep] = useState<Step>(Step.input_email);
+  const [email, setEmail] = useState("");
   const [showRegisterLink, setShowRegisterLink] = useState(false);
   const err = useError();
   const setStep = (s: Step) => {
@@ -36,7 +37,10 @@ export default function Login() {
     const email = e.target.email.value;
 
     err.asyncOrCatch(async () => {
-      const res1 = await client.Login1Challenge(email);
+      const res1 = await client.Login1Challenge(email).catch((err) => {
+        setShowRegisterLink(true);
+        throw err;
+      });
       setStep(Step.list_credentials);
       const res2 = await client.Login2Authenticate(res1).catch((err) => {
         setShowRegisterLink(true);
@@ -44,6 +48,7 @@ export default function Login() {
       });
       await client.Login3Validate(res2);
       setStep(Step.authenticated);
+      setEmail("");
       setTimeout(() => {
         navigate("/private");
       }, 1300);
@@ -71,6 +76,8 @@ export default function Login() {
               autoComplete="email webauthn"
               isRequired
               required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
 
             <Button type="submit" color="primary" fullWidth>
@@ -79,7 +86,7 @@ export default function Login() {
             {showRegisterLink ? (
               <Button
                 as={Link}
-                to="/register"
+                to={"/register?email=" + email}
                 type="button"
                 color="primary"
                 variant="bordered"

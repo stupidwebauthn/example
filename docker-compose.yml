@@ -9,10 +9,12 @@ services:
       - "MP_SMTP_AUTH_ACCEPT_ANY=true"
       - "MP_SMTP_AUTH_ALLOW_INSECURE=true"
   auth:
-    image: ghcr.io/stupidwebauthn/server:latest
+    image: ghcr.io/stupidwebauthn/server:v1.3.0
     # ports:
     #   - 127.0.0.1:3000:3000
     restart: unless-stopped
+    depends_on:
+      - mail
     environment:
       - SMTP_HOST=mail
       - SMTP_PORT=1025
@@ -27,10 +29,23 @@ services:
       - COOKIE_SECRET=zH4NRP1HMALxxCFnRZABFA7GOJtzU_gIj02alfL1lvI
       - DATABASE_PATH=./data/db.sqlite
       - EMAIL_TEMPLATE_PATH=data/email.html
+      - PORT=80
     volumes:
       - ./data:/app/data
+  example_backend:
+    build:
+      context: backend
+    # ports:
+    #   - 127.0.0.1:5179:5179
+    depends_on:
+      - auth
+    environment:
+      - SWA_BASE=http://auth:80
+      - PORT=80
   example_frontend:
     build:
       context: frontend
+    depends_on:
+      - example_backend
     ports:
       - 127.0.0.1:5178:80

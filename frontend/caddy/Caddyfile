@@ -1,7 +1,10 @@
 :80 {
 	handle /auth/* {
-		# rewrite * /auth{uri}
-		reverse_proxy http://auth:3000
+		reverse_proxy http://auth:80
+	}
+
+	handle /api/* {
+		reverse_proxy http://example_backend:80
 	}
 
 	handle {
