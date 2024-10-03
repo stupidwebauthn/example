@@ -49,18 +49,21 @@ export default function Private() {
   }
   function onGdprSet() {
     err.asyncOrCatch(async () => {
+      await client.AuthDoubleCheck123();
       const res = await client.GdprDeleteSet();
       setUser(res);
     });
   }
   function onGdprUnset() {
     err.asyncOrCatch(async () => {
+      await client.AuthDoubleCheck123();
       const res = await client.GdprDeleteUnset();
       setUser(res);
     });
   }
   function onGdprData() {
     err.asyncOrCatch(async () => {
+      await client.AuthDoubleCheck123();
       const res = await client.GdprData();
       const data = JSON.stringify(res, null, "  ");
       setGdprData(data);

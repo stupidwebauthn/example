@@ -46,7 +46,7 @@ export default function Login() {
         setShowRegisterLink(true);
         throw err;
       });
-      await client.Login3Validate(res2);
+      await client.Login3Verify(res2);
       setStep(Step.authenticated);
       setEmail("");
       setTimeout(() => {

@@ -48,7 +48,7 @@ export default function Register() {
       // check if step 3
       if (params.c) {
         setStep(Step.validating_email);
-        await client.Register2EmailValidate(params.c);
+        await client.Register2EmailVerify(params.c);
         setStep(Step.click_passkey);
       } else {
         setStep(Step.input_email);
@@ -71,8 +71,8 @@ export default function Register() {
   function onSubmitStep4() {
     err.asyncOrCatch(async () => {
       const res1 = await client.Register3PasskeyChallenge();
-      const res2 = await client.Register4AuthorizePasskey(res1);
-      await client.Register5PasskeyValidate(res2);
+      const res2 = await client.Register4PasskeyRegister(res1);
+      await client.Register5PasskeyVerify(res2);
       setStep(Step.authenticated);
       setTimeout(() => {
         navigate("/private");
