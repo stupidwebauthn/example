@@ -33,6 +33,7 @@ function App() {
           as={Link}
           target="_blank"
           color="primary"
+          data-umami-event="Go to github"
           href="https://github.com/stupidwebauthn/example"
         >
           <StarIcon className="me-1 fill-yellow-400" strokeWidth={0} />

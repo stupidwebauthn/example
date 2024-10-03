@@ -8,15 +8,18 @@ export default function useError() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async function read(err: any) {
     console.error(err);
+    let msg: string;
     if (err instanceof Error) {
-      setMessage(err.message);
+      msg = err.message;
     } else if (err instanceof Response) {
-      setMessage(await err.text());
+      msg = await err.text();
     } else if (typeof err === "string") {
-      setMessage(err);
+      msg = err;
     } else {
-      setMessage("Unknown error: " + err);
+      msg = "Unknown error: " + err;
     }
+    window.umami?.track("error", { msg });
+    setMessage(msg);
   }
 
   // First clears then runs fn with catch to read error
