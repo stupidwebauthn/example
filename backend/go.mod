@@ -5,7 +5,7 @@ go 1.23.0
 require (
 	github.com/dotenv-org/godotenvvault v0.6.0
 	github.com/gin-gonic/gin v1.10.0
-	github.com/stupidwebauthn/swa_sdk_go v1.4.0
+	github.com/stupidwebauthn/swa_sdk_go v1.5.0
 )
 
 require (
