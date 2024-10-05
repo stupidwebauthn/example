@@ -32,8 +32,8 @@ func main() {
 
 	r := gin.Default()
 
-	rPrivate := r.Group("/api/data")
-	rPrivate.Use(func(c *gin.Context) {
+	rAuth := r.Group("/api/auth")
+	rAuth.Use(func(c *gin.Context) {
 		header := c.Writer.Header()
 		res, status, err := swa.AuthMiddleware(c.Request, &header)
 		if err != nil {
@@ -43,12 +43,33 @@ func main() {
 		c.Set("swa", res)
 		c.Next()
 	})
-	rPrivate.GET("/", func(c *gin.Context) {
-		rawAuth, _ := c.Get("swa")
-		auth := rawAuth.(*swa_sdk_go.AuthResponse)
+	rAuth.GET("/data", getData)
 
-		c.JSON(http.StatusOK, auth)
+	rAuthCsrf := r.Group("/api/auth/csrf")
+	rAuthCsrf.Use(func(c *gin.Context) {
+		header := c.Writer.Header()
+		res, status, err := swa.AuthCsrfMiddleware(c.Request, &header)
+		if err != nil {
+			c.AbortWithError(status, err)
+			return
+		}
+		c.Set("swa", res)
+		c.Next()
 	})
+	rAuthCsrf.GET("/data", getData)
+
+	rAuthDouble := r.Group("/api/auth/doublecheck")
+	rAuthDouble.Use(func(c *gin.Context) {
+		header := c.Writer.Header()
+		res, status, err := swa.AuthDoubleCheckMiddleware(c.Request, &header)
+		if err != nil {
+			c.AbortWithError(status, err)
+			return
+		}
+		c.Set("swa", res)
+		c.Next()
+	})
+	rAuthDouble.GET("/data", getData)
 
 	r.GET("/api/", func(c *gin.Context) {
 		c.String(http.StatusOK, "GoLang API Server")
@@ -56,4 +77,11 @@ func main() {
 
 	r.Run("0.0.0.0:" + port)
 
+}
+
+func getData(c *gin.Context) {
+	rawAuth, _ := c.Get("swa")
+	auth := rawAuth.(*swa_sdk_go.AuthResponse)
+
+	c.JSON(http.StatusOK, auth)
 }
