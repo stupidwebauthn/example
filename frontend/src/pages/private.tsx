@@ -21,6 +21,7 @@ import {
   LandmarkIcon,
   ShieldAlertIcon,
   ShieldIcon,
+  ShieldMinusIcon,
   ShieldPlusIcon,
   ShieldQuestionIcon,
   Trash2Icon,
@@ -111,6 +112,14 @@ export default function Private() {
     err.asyncOrCatch(async () => {
       await client.AuthDoubleCheck123();
       await client.AuthPanic();
+      navigate("/");
+    });
+  }
+  function onDeletePasskey() {
+    err.asyncOrCatch(async () => {
+      const res1 = await client.AuthDoubleCheck1Challenge();
+      const res2 = await client.AuthDoubleCheck2Authenticate(res1);
+      await client.AuthDeletePasskey3(res2);
       navigate("/");
     });
   }
@@ -244,7 +253,11 @@ export default function Private() {
 
           <Button color="danger" variant="bordered" onClick={onPanic}>
             <ShieldAlertIcon size={16} />
-            Revoke all login-sessions and passkeys
+            Revoke ALL login-sessions and passkeys
+          </Button>
+          <Button color="danger" variant="bordered" onClick={onDeletePasskey}>
+            <ShieldMinusIcon size={16} />
+            Remove this passkey from account
           </Button>
 
           <Button color="danger" onClick={onLogout}>
