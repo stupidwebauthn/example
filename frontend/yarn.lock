@@ -4386,10 +4386,10 @@ strip-json-comments@^3.1.1:
   resolved "https://registry.yarnpkg.com/strip-json-comments/-/strip-json-comments-3.1.1.tgz#31f1281b3832630434831c310c01cccda8cbe006"
   integrity sha512-6fPc+R4ihwqP6N/aIv2f1gMH8lOVtWQHoqC4yK6oSDVVocumAsfCqjkXnqiYMhmMwS/mEHLp7Vehlt3ql6lEig==
 
-stupidwebauthn-client@1.6.0:
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/stupidwebauthn-client/-/stupidwebauthn-client-1.6.0.tgz#60ae65a691a74bb8a6574852abba12cf714c2f04"
-  integrity sha512-xHd0na8t2tMD3MmaVUCKO1jaSwcV8sWEfoQ00IPNcTIlIOOOmGdSSU9g+nqjjxaqA6NK1r95E18sxUjfpTEq3A==
+stupidwebauthn-client@1.8.0:
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/stupidwebauthn-client/-/stupidwebauthn-client-1.8.0.tgz#602ab5e4855ba7eddc851c3edad530b2ccf4b515"
+  integrity sha512-Tcaxqu18uUM4fozgzft2knfYqEDAE/UaXn5i7Rhtqy2kW/2uiffZ56CmSPhqQpurAys1D62x8NXT03VAPDw4RQ==
   dependencies:
     "@passwordless-id/webauthn" "^2.1.1"
 

@@ -80,6 +80,16 @@ export default function Register() {
     });
   }
 
+  function onSubmitNoPasskey() {
+    err.asyncOrCatch(async () => {
+      await client.Register3NoPasskeyLogin();
+      setStep(Step.authenticated);
+      setTimeout(() => {
+        navigate("/private");
+      }, 1300);
+    });
+  }
+
   return (
     <div className="flex min-h-svh justify-center items-start py-24">
       <Card className="w-full max-w-96">
@@ -119,9 +129,14 @@ export default function Register() {
           ) : step == Step.validating_email ? (
             <p>Email is being validated</p>
           ) : step == Step.click_passkey ? (
-            <Button onClick={onSubmitStep4} color="primary">
-              Add Passkey to your new account
-            </Button>
+            <>
+              <Button onClick={onSubmitStep4} color="primary">
+                Add Passkey to your new account
+              </Button>
+              <Button onClick={onSubmitNoPasskey} color="primary">
+                Login without passkey <small>with limited access</small>
+              </Button>
+            </>
           ) : null}
           {err.render()}
         </CardBody>
