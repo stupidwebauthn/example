@@ -19,6 +19,7 @@ import {
   ArrowLeftIcon,
   ChevronDownIcon,
   LandmarkIcon,
+  LogOutIcon,
   ShieldAlertIcon,
   ShieldIcon,
   ShieldMinusIcon,
@@ -31,7 +32,7 @@ import useError from "../components/error.hook";
 
 const client = new StupidWebauthnClient();
 
-type BackendOption = "default" | "csrf" | "double";
+type BackendOption = "default" | "csrf" | "double" | "logout";
 export default function Private() {
   const navigate = useNavigate();
   const err = useError();
@@ -73,6 +74,12 @@ export default function Private() {
           await client.AuthDoubleCheck123();
           res = await fetch("/api/auth/doublecheck/data");
           break;
+        case "logout":
+          res = await fetch("/api/auth/logout", { method: "POST" });
+          if (res.status >= 400)
+            throw res.statusText + " " + (await res.text());
+          navigate("/");
+          return;
         default:
           throw "Invalid backend request option selected";
       }
@@ -142,6 +149,8 @@ export default function Private() {
                   ? "extra passkey check"
                   : selectedBackendOptionFirst == "csrf"
                   ? "csrf defense"
+                  : selectedBackendOptionFirst == "logout"
+                  ? "logout"
                   : "Without csrf"}
               </small>
             </Button>
@@ -189,6 +198,13 @@ export default function Private() {
                     description="Needs to reauthenticate with a passkey"
                   >
                     Double check
+                  </DropdownItem>
+                  <DropdownItem
+                    key="logout"
+                    startContent={<LogOutIcon />}
+                    description="The backend server triggers a logout"
+                  >
+                    Logout
                   </DropdownItem>
                 </DropdownSection>
               </DropdownMenu>

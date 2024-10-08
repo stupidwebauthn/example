@@ -45,6 +45,14 @@ func main() {
 	})
 	rAuth.GET("/data", getData)
 
+	rAuth.POST("/logout", func(c *gin.Context) {
+		status, err := swa.Logout(c.Request, c.Writer)
+		if err != nil {
+			c.AbortWithError(status, err)
+			return
+		}
+	})
+
 	rAuthCsrf := r.Group("/api/auth/csrf")
 	rAuthCsrf.Use(func(c *gin.Context) {
 		header := c.Writer.Header()

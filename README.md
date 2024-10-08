@@ -19,7 +19,7 @@ cd stupidwebauthnexample
 Run
 
 ```sh
-docker compose up
+docker compose up --build
 ```
 
 Open http://localhost:5178/ and the test mail server http://localhost:8025/
