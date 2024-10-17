@@ -9,7 +9,7 @@ services:
       - "MP_SMTP_AUTH_ACCEPT_ANY=true"
       - "MP_SMTP_AUTH_ALLOW_INSECURE=true"
   auth:
-    image: ghcr.io/stupidwebauthn/server:v1.8.2
+    image: ghcr.io/stupidwebauthn/server:v1.8.3
     restart: unless-stopped
     depends_on:
       - mail
@@ -25,6 +25,7 @@ services:
       - COOKIE_DOMAIN=localhost
       - COOKIE_SECURE=false
       - COOKIE_SECRET=zH4NRP1HMALxxCFnRZABFA7GOJtzU_gIj02alfL1lvI
+      - COOKIE_PREFIX=swa_
       - DATABASE_PATH=./data/db.sqlite
       - EMAIL_TEMPLATE_PATH=data/email.html
       - PORT=80
