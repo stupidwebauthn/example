@@ -9,7 +9,7 @@ services:
       - "MP_SMTP_AUTH_ACCEPT_ANY=true"
       - "MP_SMTP_AUTH_ALLOW_INSECURE=true"
   auth:
-    image: ghcr.io/stupidwebauthn/server:v1.8.4
+    image: ghcr.io/stupidwebauthn/server:v1.8.8
     restart: unless-stopped
     depends_on:
       - mail
